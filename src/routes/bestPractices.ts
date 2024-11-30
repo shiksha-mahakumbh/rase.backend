@@ -22,6 +22,6 @@ const upload = multer({
 });
 
 // POST route for submitting best practices
-router.post("/submit", upload.single("attachment"), submitBestPractice);
+router.post("/", upload.single("attachment"), submitBestPractice);
 
 export default router;

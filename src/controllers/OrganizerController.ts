@@ -1,5 +1,4 @@
-// src/controllers/OrganizerController.ts
-import { NextRequest, NextResponse } from 'next/server';
+import { Request, Response } from 'express'; // Ensure to import express types
 import { createOrganizer } from '../models/OrganizerModel';
 
 // Allowed state codes for validation
@@ -12,25 +11,18 @@ const stateCodes = {
 };
 
 // POST handler for organizer registration
-export async function POST(req: NextRequest): Promise<NextResponse> {
+export async function POST(req: Request, res: Response): Promise<Response> {
   try {
-    const body = await req.json();
-    const { name, phone, designation, institution, duty, email, accommodation, stateCode } = body;
+    const { name, phone, designation, institution, duty, email, accommodation, stateCode } = req.body;
 
     // Validate state code
     if (!stateCodes[stateCode as keyof typeof stateCodes]) {
-      return NextResponse.json(
-        { message: 'Invalid state code. Please enter a valid state code.' },
-        { status: 400 }
-      );
+      return res.status(400).json({ message: 'Invalid state code. Please enter a valid state code.' });
     }
 
     // Validate mandatory fields
     if (!name || !phone || !designation || !institution || !duty || !accommodation) {
-      return NextResponse.json(
-        { message: 'Please fill all mandatory fields.' },
-        { status: 400 }
-      );
+      return res.status(400).json({ message: 'Please fill all mandatory fields.' });
     }
 
     // Prepare data for insertion into the database
@@ -47,15 +39,14 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     });
 
     // Return success message with the new organizer details
-    return NextResponse.json(
-      { message: 'Registration successful!', organizer: newOrganizer },
-      { status: 201 }
-    );
+    return res.status(201).json({
+      message: 'Registration successful!',
+      organizer: newOrganizer,
+    });
   } catch (error) {
     console.error('Error processing registration:', error);
-    return NextResponse.json(
-      { message: 'An error occurred during registration. Please try again later.' },
-      { status: 500 }
-    );
+    return res.status(500).json({
+      message: 'An error occurred during registration. Please try again later.',
+    });
   }
 }

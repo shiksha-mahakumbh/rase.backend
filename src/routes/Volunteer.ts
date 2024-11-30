@@ -1,10 +1,9 @@
-// src/routes/volunteerRoute.ts
-import { Router } from 'express';
+import express from 'express';
 import { registerVolunteer } from '../controllers/VolunteerController';
 
-const router = Router();
+const router = express.Router();
 
-// POST request for volunteer registration
-router.post('/register', registerVolunteer);
+// Route for volunteer registration
+router.post('/', registerVolunteer);
 
 export default router;

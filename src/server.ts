@@ -1,19 +1,19 @@
 import express, { Request, Response, NextFunction } from 'express';
 import path from 'path';
 import fileUpload from 'express-fileupload'; // File upload middleware
-import Abstract from './routes/Abstract'; 
-import bestPracticesRoute from "./routes/bestPractices";// Routes for accommodation
-import Accomodation from './routes/Accomodation'
-import Conclave from './routes/conclaveForm'
-import Delegate from './routes/delegateForm'
-import FullPaper from './routes/FullLengthPaper'
-import Institution from './routes/InstitutionRoute'
-import NGO from './routes/NGORoute'
-import hei from './routes/HEI'
-import organizer from './routes/Organizer'
-import school from './routes/School'
-import talent from './routes/Talent'
-import volunteer from './routes/Volunteer'
+import submitAbstract from './routes/Abstract'; 
+import submitBestPractice from "./routes/bestPractices";// Routes for accommodation
+import bookAccommodation from './routes/Accomodation'
+import submitConclaveForm from './routes/conclaveForm'
+import submitDelegateForm from './routes/delegateForm'
+import submitPaper from './routes/FullLengthPaper'
+import submitInstitution from './routes/InstitutionRoute'
+import submitNgo from './routes/NGORoute'
+import submitHEIProject from './routes/HEI'
+import POST from './routes/Organizer'
+import submitSchoolProject from './routes/School'
+import submitTalent from './routes/Talent'
+import registerVolunteer from './routes/Volunteer'
 const app = express();
 
 // Middleware
@@ -25,19 +25,19 @@ app.use(fileUpload()); // Middleware for handling file uploads
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Routes
-app.use('/AbstractSubmission', Abstract);
-app.use('/talent',talent);
-app.use('/organizer', organizer);
-app.use('/Accomodation', Accomodation);
-app.use('/Conclave', Conclave);
-app.use('/FullPaper', FullPaper);
-app.use('/HEI', hei);
-app.use('/Institution', Institution);
-app.use('/delegate', Delegate);
-app.use('/ngo', NGO);
-app.use('/school', school);
-app.use('/volunteer', volunteer);
-app.use("/api/best-practices", bestPracticesRoute);
+app.use('/AbstractSubmission', submitAbstract);
+app.use('/talent',submitTalent);
+app.use('/organizer', POST);
+app.use('/Accomodation', bookAccommodation);
+app.use('/Conclave', submitConclaveForm);
+app.use('/FullPaper', submitPaper);
+app.use('/HEI', submitHEIProject);
+app.use('/Institution', submitInstitution);
+app.use('/delegate', submitDelegateForm);
+app.use('/ngo', submitNgo);
+app.use('/school', submitSchoolProject);
+app.use('/volunteer', registerVolunteer);
+app.use("/api/best-practices", submitBestPractice);
 // Root route (you can also add some basic test routes or a landing page here)
 app.get('/', (req: Request, res: Response) => {
   res.send('Welcome to the accommodation booking API!');

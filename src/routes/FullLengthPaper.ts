@@ -23,7 +23,7 @@ const router = express.Router();
 
 // Route for paper submission
 router.post(
-  '/FullPaper',
+  '/',
   upload.fields([
     { name: 'AttachmentsWord', maxCount: 1 },
     { name: 'AttachmentsPdf', maxCount: 1 },

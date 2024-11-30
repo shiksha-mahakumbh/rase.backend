@@ -5,6 +5,6 @@ import { POST } from '../controllers/OrganizerController';
 const router = Router();
 
 // Define the route for organizer registration (POST)
-router.post('/register', POST);
+router.post('/', POST);
 
 export default router;

@@ -18,6 +18,6 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 // POST route for talent submission
-router.post('/talent', upload.single('attachment'), submitTalent);
+router.post('/', upload.single('attachment'), submitTalent);
 
 export default router;

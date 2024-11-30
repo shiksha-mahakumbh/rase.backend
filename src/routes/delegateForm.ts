@@ -18,6 +18,6 @@ const upload = multer({
 });
 
 // POST route for delegate form submission
-router.post("/delegate", upload.array("files"), submitDelegateForm);
+router.post("/", upload.array("files"), submitDelegateForm);
 
 export default router;

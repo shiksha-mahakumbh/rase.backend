@@ -1,0 +1,38 @@
+node_modules
+# Ignore .env files
+.env
+# Node.js dependencies
+node_modules/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Environment files
+.env
+
+# Optional npm cache directory
+.npm
+
+# Build output
+dist/
+build/
+
+# IDE and editor folders
+.vscode/
+.idea/
+*.swp
+
+# Operating system files
+.DS_Store
+Thumbs.db
+
+# Coverage folder
+coverage/
+
+# Temporary files
+*.tmp
+*.bak
+
+# OS-generated files (Windows)
+Desktop.ini

@@ -13,15 +13,13 @@ export const createInstitution = async (institutionData: {
 }) => {
   const { name, role, email, contactNumber, website, cont, feeAmount, feeReceipt } = institutionData;
 
-  // SQL query to insert a new institution
   const queryStr = `
     INSERT INTO institutions (name, role, email, contactNumber, website, cont, feeAmount, feeReceipt)
     VALUES (?, ?, ?, ?, ?, ?, ?, ?);
   `;
 
   try {
-    // Execute the query
-    const [result] = await query(queryStr, [
+    const result = await query(queryStr, [
       name,
       role,
       email,
@@ -32,13 +30,14 @@ export const createInstitution = async (institutionData: {
       feeReceipt,
     ]);
 
-    return result; // Returning result (e.g., insertId, etc.)
+    // Log the result to understand the return type
+    console.log('Query Result:', result);
+
+    return result;
   } catch (error) {
-    // Assert that the error is of type Error
     if (error instanceof Error) {
       throw new Error(`Error creating institution: ${error.message}`);
     } else {
-      // Fallback if the error is not an instance of Error
       throw new Error('Error creating institution: Unknown error');
     }
   }

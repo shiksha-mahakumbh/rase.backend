@@ -18,6 +18,6 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 // POST route to submit institution form data
-router.post('/Institution', upload.single('feeReceipt'), submitInstitution);
+router.post('/', upload.single('feeReceipt'), submitInstitution);
 
 export default router;

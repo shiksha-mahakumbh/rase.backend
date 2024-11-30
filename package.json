@@ -5,7 +5,8 @@
   "scripts": {
     "build": "tsc",
     "start": "node dist/server.js",
-    "dev": "ts-node src/server.ts"
+    "dev": "ts-node src/server.ts",
+    "start:dev": "nodemon src/server.ts" 
   },
   "dependencies": {
     "@types/react": "^18.3.12",
@@ -36,7 +37,7 @@
     "@types/next": "^8.0.7",
     "@types/node": "^20.17.9",
     "@types/nodemailer": "^6.4.15",
-    "nodemon": "^3.1.4",
+    "nodemon": "^3.1.7",
     "ts-node": "^10.9.2",
     "typescript": "^5.7.2"
   }

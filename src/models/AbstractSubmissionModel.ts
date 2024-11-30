@@ -20,7 +20,7 @@ export const createAbstractSubmission = async (submissionData: any) => {
     const result = await query(
       `INSERT INTO AbstractSubmission 
        (PaperTitle, CorrespondingAuthorEmail, CorrespondingAuthorName, Keywords, ContactNumber, AttachmentsWord, AttachmentsPdf, FeeReceipt, type, CoAuthors)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING id`,
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?,?) RETURNING id`,
       [
         PaperTitle,
         CorrespondingAuthorEmail,

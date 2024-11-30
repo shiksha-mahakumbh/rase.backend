@@ -1,7 +1,7 @@
 import express from 'express';
 import multer from 'multer';
 import path from 'path';
-import { submitInstitution } from '../controllers/InstitutionController';
+import { submitHEIProject } from '../controllers/HEIController';
 
 const router = express.Router();
 
@@ -18,6 +18,6 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 // POST route to submit institution form data
-router.post('/Institution', upload.single('feeReceipt'), submitInstitution);
+router.post('/', upload.single('feeReceipt'), submitHEIProject);
 
 export default router;

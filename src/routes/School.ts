@@ -20,7 +20,7 @@ const upload = multer({ storage });
 
 // POST route for submitting school projects
 router.post(
-  '/school',
+  '/',
   upload.fields([
     { name: 'projectPpt', maxCount: 1 },
     { name: 'projectVideo', maxCount: 1 },

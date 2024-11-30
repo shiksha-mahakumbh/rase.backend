@@ -10,10 +10,10 @@ interface FullLengthPaperAttributes {
   CoauthorEmail?: string;
   Keywords?: string;
   ContactNumber?: string;
-  AttachmentsWord?: string;  // Type can be `string | undefined`
-  AttachmentsPdf?: string;   // Type can be `string | undefined`
-  AttachmentsPpt?: string;   // Type can be `string | undefined`
-  FeeReceipt?: string;      // Type can be `string | undefined`
+  AttachmentsWord?: string|null;  // Type can be `string | undefined`
+  AttachmentsPdf?: string|null;   // Type can be `string | undefined`
+  AttachmentsPpt?: string|null;   // Type can be `string | undefined`
+  FeeReceipt?: string|null;      // Type can be `string | undefined`
 }
 
 // Define creation attributes interface

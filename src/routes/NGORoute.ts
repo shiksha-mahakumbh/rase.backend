@@ -5,6 +5,6 @@ import { submitNgo } from '../controllers/NGOController'; // Import the submitNg
 const router = express.Router();
 
 // POST route to submit NGO form data
-router.post('/ngo', submitNgo); // This route will handle the POST request for creating an NGO
+router.post('/', submitNgo); // This route will handle the POST request for creating an NGO
 
 export default router;

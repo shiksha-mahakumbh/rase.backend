@@ -1,10 +1,10 @@
-// src/controllers/TalentController.ts
 import { Request, Response } from 'express';
-import { query } from '../utils/db'; // Import query helper function for database interactions
-import { Talent } from '../models/TalentModel'; // Import Talent model (interface)
+import { TalentModel } from '../models/TalentModel'; // Import TalentModel class
+import { Talent } from '../models/TalentModel'; // Import Talent interface
 
 export const submitTalent = async (req: Request, res: Response): Promise<Response> => {
   try {
+    // Destructure the request body and type it as Talent
     const {
       name,
       talentName,
@@ -13,9 +13,9 @@ export const submitTalent = async (req: Request, res: Response): Promise<Respons
       email,
       contactNumber,
       description,
-    }: Talent = req.body; // Typecast the incoming request body to match Talent interface
+    }: Talent = req.body;
 
-    // Validate all required fields
+    // Check if required fields are provided
     if (
       !name ||
       !talentName ||
@@ -29,12 +29,8 @@ export const submitTalent = async (req: Request, res: Response): Promise<Respons
       return res.status(400).json({ message: 'All fields are required.' });
     }
 
-    // Prepare SQL query to insert new talent data
-    const insertQuery = `
-      INSERT INTO talents (name, talentName, institutionName, talentType, email, contactNumber, description, attachment)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-    `;
-    const values = [
+    // Prepare the talent object to be inserted into the database
+    const talentData: Talent = {
       name,
       talentName,
       institutionName,
@@ -42,13 +38,13 @@ export const submitTalent = async (req: Request, res: Response): Promise<Respons
       email,
       contactNumber,
       description,
-      req.file?.path, // Store the file path
-    ];
+      attachment: req.file?.path, // Get the file path for the attachment
+    };
 
-    // Execute the query
-    const result = await query(insertQuery, values);
+    // Call the TalentModel to insert the data into the database
+    const result = await TalentModel.submitTalent(talentData);
 
-    // Return success response
+    // Return a success response
     return res.status(201).json({ message: 'Talent submitted successfully!', data: result });
   } catch (error) {
     console.error('Error during talent submission:', error);

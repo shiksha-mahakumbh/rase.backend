@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 30, 2024 at 10:15 AM
+-- Generation Time: Nov 30, 2024 at 11:29 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -20,6 +20,28 @@ SET time_zone = "+00:00";
 --
 -- Database: `rase`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `abstractsubmission`
+--
+
+CREATE TABLE `abstractsubmission` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `PaperTitle` text NOT NULL,
+  `CorrespondingAuthorEmail` varchar(255) NOT NULL,
+  `CorrespondingAuthorName` varchar(255) NOT NULL,
+  `Keywords` text DEFAULT NULL,
+  `ContactNumber` varchar(20) DEFAULT NULL,
+  `AttachmentsWord` text DEFAULT NULL,
+  `AttachmentsPdf` text DEFAULT NULL,
+  `FeeReceipt` text DEFAULT NULL,
+  `type` varchar(50) DEFAULT NULL,
+  `CoAuthors` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`CoAuthors`)),
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -73,6 +95,51 @@ CREATE TABLE `best_practices` (
 
 INSERT INTO `best_practices` (`id`, `institution_name`, `about_practices`, `key_person`, `email`, `contact_number`, `address`, `attachment`, `created_at`) VALUES
 (1, 'Tech University', 'Tech University focuses on sustainable and innovative tech solutions.', 'Dr. John Doe', 'john.doe@techuniversity.edu', '+1234567890', '123 Tech Road, Silicon Valley, CA', NULL, '2024-11-30 08:05:55');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `conclave_forms`
+--
+
+CREATE TABLE `conclave_forms` (
+  `id` int(11) NOT NULL,
+  `typeof_conclave` varchar(255) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `designation` varchar(255) NOT NULL,
+  `institution_name` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `contact_number` varchar(20) NOT NULL,
+  `address` text NOT NULL,
+  `views` text NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `conclave_forms`
+--
+
+INSERT INTO `conclave_forms` (`id`, `typeof_conclave`, `name`, `designation`, `institution_name`, `email`, `contact_number`, `address`, `views`, `created_at`) VALUES
+(1, 'AI & Tech Summit 2024', 'Dr. John Doe', 'Senior Researcher', 'Tech Innovators Institute', 'john.doe@techinnovators.com', '+11234567890', '123 Silicon Valley, Tech City, CA, USA', 'The conclave should address the latest trends in AI, focusing on ethical concerns and future directions.', '2024-11-30 08:09:23');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `delegate_forms`
+--
+
+CREATE TABLE `delegate_forms` (
+  `id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `designation` varchar(255) NOT NULL,
+  `institution_name` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `contact_number` varchar(20) NOT NULL,
+  `address` text NOT NULL,
+  `views` text NOT NULL,
+  `files` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL CHECK (json_valid(`files`)),
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -253,6 +320,12 @@ CREATE TABLE `volunteers` (
 --
 
 --
+-- Indexes for table `abstractsubmission`
+--
+ALTER TABLE `abstractsubmission`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `accommodations`
 --
 ALTER TABLE `accommodations`
@@ -262,6 +335,18 @@ ALTER TABLE `accommodations`
 -- Indexes for table `best_practices`
 --
 ALTER TABLE `best_practices`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `conclave_forms`
+--
+ALTER TABLE `conclave_forms`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `delegate_forms`
+--
+ALTER TABLE `delegate_forms`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -317,6 +402,12 @@ ALTER TABLE `volunteers`
 --
 
 --
+-- AUTO_INCREMENT for table `abstractsubmission`
+--
+ALTER TABLE `abstractsubmission`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `accommodations`
 --
 ALTER TABLE `accommodations`
@@ -327,6 +418,18 @@ ALTER TABLE `accommodations`
 --
 ALTER TABLE `best_practices`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `conclave_forms`
+--
+ALTER TABLE `conclave_forms`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `delegate_forms`
+--
+ALTER TABLE `delegate_forms`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `full_length_papers`

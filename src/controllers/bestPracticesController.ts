@@ -15,7 +15,7 @@ export const submitBestPractice = async (req: Request, res: Response): Promise<v
 
     let filePath: string | undefined;
     if (file) {
-      const uploadDir = path.join(process.cwd(), "public/uploads");
+      const uploadDir = path.join(process.cwd(), "/uploads");
       await fs.mkdir(uploadDir, { recursive: true });
       filePath = `/uploads/${file.filename}`;
     }

@@ -3,11 +3,19 @@ import { IncomingForm } from 'formidable'; // Import formidable for file handlin
 import path from 'path';
 import { createVolunteer } from '../models/VolunteerModel'; // Import createVolunteer model function
 import { Volunteer } from '../models/VolunteerModel'; // Import Volunteer interface
+import fs from 'fs';
 
 // Handle POST request for volunteer registration
 export const registerVolunteer = async (req: Request, res: Response): Promise<Response> => {
+  const uploadDir = path.join(process.cwd(), 'uploads', 'resumes');
+
+  // Ensure the upload directory exists
+  if (!fs.existsSync(uploadDir)) {
+    fs.mkdirSync(uploadDir, { recursive: true });
+  }
+
   const form = new IncomingForm({
-    uploadDir: path.join(process.cwd(), 'uploads', 'resumes'), // Directory to store uploaded files
+    uploadDir: uploadDir, // Directory to store uploaded files
     keepExtensions: true, // Keep file extensions
     maxFileSize: 5 * 1024 * 1024, // Max file size (5MB)
     filter: (part) => part.mimetype === 'application/pdf' || part.mimetype === 'image/png' || part.mimetype === 'image/jpeg', // Allowed file types
@@ -17,7 +25,7 @@ export const registerVolunteer = async (req: Request, res: Response): Promise<Re
     form.parse(req, async (err, fields, files) => {
       if (err) {
         // Error during form parsing
-        console.error("Error in form parsing:", err);
+        console.error('Error in form parsing:', err);
         return resolve(
           res.status(500).json({ error: 'File upload failed', details: err })
         );

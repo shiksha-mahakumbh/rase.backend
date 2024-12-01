@@ -1,54 +1,74 @@
 import { Request, Response } from 'express';
-import { createHEIProject } from '../models/HEIModel';  // Import the model for database interaction
+import { UploadedFile } from 'express-fileupload';
+import path from 'path';
+import { createHEIProject } from '../models/HEIModel';
 
-// Helper function to get the file path, if exists
-const getFilePath = (files: any, fieldName: string): string | null => {
-  const file = files?.[fieldName];
-  if (!file) return null;
-  return `/uploads/${Array.isArray(file) ? file[0].filename : file.filename}`;
-};
+interface HEIRequest extends Request {
+  files: {
+    projectPpt: UploadedFile;
+    projectDoc: UploadedFile;
+  };
+}
 
-// Function to handle HEI project submission
-export const submitHEIProject = async (req: Request, res: Response) => {
+// Controller function to create a new HEI project
+export const createProject = async (req: HEIRequest, res: Response) => {
+  const {
+    projectName,
+    projectDescription,
+    instituteName,
+    instituteAddress,
+    teamSize,
+    participants,
+  } = req.body;
+
+  const { projectPpt, projectDoc } = req.files; // Get files from request
+
+  // Ensure both files are provided
+  if (!projectPpt || !projectDoc) {
+    return res.status(400).json({ message: 'PPT and Document files are required' });
+  }
+
+  // Generate unique filenames for the files
+  const pptFileName = `${Date.now()}_${projectPpt.name}`;
+  const docFileName = `${Date.now()}_${projectDoc.name}`;
+
+  // Define the paths where the files will be saved
+  const pptUploadPath = path.join(__dirname, '../uploads', pptFileName);
+  const docUploadPath = path.join(__dirname, '../uploads', docFileName);
+
   try {
-    const { projectName, projectDescription, instituteName, instituteAddress, teamSize, participants } = req.body;
+    // Move files from temp location to the upload folder
+    await projectPpt.mv(pptUploadPath);
+    await projectDoc.mv(docUploadPath);
+  } catch (err) {
+    return res.status(500).json({ message: 'Error uploading files' });
+  }
 
-    // Extract file paths using the helper function
-    const projectPptPath = getFilePath(req.files, 'projectPpt');
-    const projectVideoPath = getFilePath(req.files, 'projectVideo');
-    const feeUploadPath = getFilePath(req.files, 'feeUpload');
+  // Convert participants to JSON string for storage
+  const participantsData = JSON.stringify(participants);
 
-    // Validate required fields and files
-    if (
-      !projectName || !projectDescription || !instituteName || !instituteAddress ||
-      !teamSize || !participants || !projectPptPath || !projectVideoPath || !feeUploadPath
-    ) {
-      return res.status(400).json({ error: 'All fields and file uploads are required.' });
-    }
+  // Prepare project data for insertion
+  const projectData = {
+    projectName,
+    projectDescription,
+    instituteName,
+    instituteAddress,
+    teamSize,
+    participants: participantsData,
+    projectPptPath: pptUploadPath,
+    projectDocPath: docUploadPath,
+  };
 
-    // Call the model to insert data into the database
-    const result = await createHEIProject({
-      projectName,
-      projectDescription,
-      instituteName,
-      instituteAddress,
-      teamSize,
-      participants: JSON.stringify(participants),  // Convert participants to JSON
-      projectPptPath,
-      projectVideoPath,
-      feeUploadPath,
-    });
+  try {
+    // Call the model to insert the project
+    const result = await createHEIProject(projectData);
 
-    // Return a success response
     return res.status(200).json({
-      message: 'HEI project submitted successfully!',
-      project: {
-        projectName, projectDescription, instituteName, instituteAddress, teamSize,
-        participants, projectPptPath, projectVideoPath, feeUploadPath,
-      },
+      message: 'Project submitted successfully',
+      projectId: result.insertId,
     });
   } catch (error) {
-    console.error('Error:', error);
-    return res.status(500).json({ error: 'Failed to submit the HEI project.' });
+    console.error('Error creating project:', error);
+    return res.status(500).json({ message: 'Failed to create HEI project' });
   }
 };

@@ -6,10 +6,9 @@ interface HEIProjectData {
   instituteName: string;
   instituteAddress: string;
   teamSize: number;
-  participants: string;  // Store as a JSON string
+  participants: string;  // Store participants as a JSON string
   projectPptPath: string | null;
-  projectVideoPath: string | null;
-  feeUploadPath: string | null;
+  projectDocPath: string | null;
 }
 
 // Function to insert a new HEI project into the database
@@ -22,19 +21,27 @@ export const createHEIProject = async (projectData: HEIProjectData) => {
     teamSize,
     participants,
     projectPptPath,
-    projectVideoPath,
-    feeUploadPath
+    projectDocPath,
   } = projectData;
+
+  // Check for missing required fields
+  if (!projectName || !projectDescription || !instituteName || !instituteAddress || !teamSize || !participants) {
+    throw new Error('All required fields must be provided');
+  }
+
+  // Ensure that the file paths are not null or undefined
+  const pptFilePath = projectPptPath || null;  // If no PPT file path, set to null
+  const docFilePath = projectDocPath || null;  // If no document file path, set to null
 
   const queryStr = `
     INSERT INTO hei_projects (
       projectName, projectDescription, instituteName, instituteAddress,
-      teamSize, participants, projectPptPath, projectVideoPath, feeUploadPath
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
+      teamSize, participants, projectPptPath, projectDocPath
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?);
   `;
 
   try {
-    // Use the db query function to execute the insert query
+    // Execute the query to insert the project into the database
     const result = await query(queryStr, [
       projectName,
       projectDescription,
@@ -42,20 +49,33 @@ export const createHEIProject = async (projectData: HEIProjectData) => {
       instituteAddress,
       teamSize,
       participants,
-      projectPptPath,
-      projectVideoPath,
-      feeUploadPath,
+      pptFilePath,  // Ensure this is either a path or null
+      docFilePath,  // Ensure this is either a path or null
     ]);
+    console.log({
+      projectName,
+      projectDescription,
+      instituteName,
+      instituteAddress,
+      teamSize,
+      participants,
+      pptFilePath,
+      docFilePath
+    });
+    
+    // Assuming the result is in the format [RowDataPacket] and contains insertId
+    const insertId = result[0].insertId;
 
-    return result;  // Return the result of the query (e.g., inserted row ID or success)
-  } catch (error) {
-    // Check if the error is an instance of Error (to safely access the message)
+    return { insertId };  // Return the insertId
+  } catch (error: unknown) {
+    // Type assertion to tell TypeScript that error is an instance of Error
     if (error instanceof Error) {
-      console.error('Error inserting HEI project:', error);
+      // Now TypeScript knows that error is an Error object and has a message property
+      console.error('Error creating HEI project:', error.message);
       throw new Error(`Error creating HEI project: ${error.message}`);
     } else {
-      // If it's not an instance of Error, log the unknown error
-      console.error('Unknown error:', error);
+      // In case the error is not an instance of Error, we throw a generic error
+      console.error('Unknown error occurred while creating HEI project');
       throw new Error('Unknown error occurred while creating HEI project');
     }
   }

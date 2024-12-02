@@ -2,19 +2,19 @@ import express, { Request, Response, NextFunction } from 'express';
 import path from 'path';
 import fileUpload from 'express-fileupload'; // File upload middleware
 import cors from 'cors'; // Import cors separately
-import submitAbstract from './routes/Abstract';
-import submitBestPractice from './routes/bestPractices'; // Routes for best practices
+// import submitAbstract from './routes/Abstract';
+// import submitBestPractice from './routes/bestPractices'; // Routes for best practices
 import submitAccommodation from './routes/Accomodation';
 import submitConclaveForm from './routes/conclaveForm';
-import submitDelegateForm from './routes/delegateForm';
-import submitPaper from './routes/FullLengthPaper';
-import submitInstitution from './routes/InstitutionRoute';
-import submitNgo from './routes/NGORoute';
-import submitHEIProject from './routes/HEI';
-import POST from './routes/Organizer';
-import submitSchoolProject from './routes/School';
-import submitTalent from './routes/Talent';
-import registerVolunteer from './routes/Volunteer';
+// import submitDelegateForm from './routes/delegateForm';
+// import submitPaper from './routes/FullLengthPaper';
+// import submitInstitution from './routes/InstitutionRoute';
+// import submitNgo from './routes/NGORoute';
+// import submitHEIProject from './routes/HEI';
+// import POST from './routes/Organizer';
+// import submitSchoolProject from './routes/School';
+// import submitTalent from './routes/Talent';
+// import registerVolunteer from './routes/Volunteer';
 
 const app = express();
 
@@ -35,22 +35,21 @@ app.use(express.urlencoded({ extended: true })); // Parse URL-encoded bodies
 // File upload middleware with debugging info and error handling
 
 // Serve static files (like the uploaded files)
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-
+// app.use('/uploads', express.static(path.join(__dirname, 'uploads')));///
 // Routes
-app.use('/AbstractSubmission', submitAbstract);
-app.use('/talent', submitTalent);
-app.use('/organizer', POST);
+// app.use('/AbstractSubmission', submitAbstract);
+// app.use('/talent', submitTalent);
+// app.use('/organizer', POST);
 app.use('/Accomodation', submitAccommodation);
 app.use('/Conclave', submitConclaveForm);
-app.use('/FullPaper', submitPaper);
-app.use('/HEI', submitHEIProject);
-app.use('/Institution', submitInstitution);
-app.use('/delegate', submitDelegateForm);
-app.use('/ngo', submitNgo);
-app.use('/school', submitSchoolProject);
-app.use('/volunteer', registerVolunteer);
-app.use('/api/best-practices', submitBestPractice);
+// app.use('/FullPaper', submitPaper);
+// app.use('/HEI', submitHEIProject);
+// app.use('/Institution', submitInstitution);
+// app.use('/delegate', submitDelegateForm);
+// app.use('/ngo', submitNgo);
+// app.use('/school', submitSchoolProject);
+// app.use('/volunteer', registerVolunteer);
+// app.use('/api/best-practices', submitBestPractice);
 
 // Root route (you can also add some basic test routes or a landing page here)
 app.get('/', (req: Request, res: Response) => {
